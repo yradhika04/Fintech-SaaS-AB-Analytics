@@ -1,0 +1,55 @@
+name: CI - dbt test on PR
+
+on:
+  pull_request:
+    paths:
+      - 'fintech_saas_ab_analytics/**'
+
+jobs:
+  dbt-test:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write  #required for Workload Identity Federation
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v2
+        with:
+          workload_identity_provider: ${{ secrets.WIF_PROVIDER }}
+          service_account: ${{ secrets.WIF_SERVICE_ACCOUNT }}
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dbt
+        run: pip install dbt-bigquery
+
+      - name: Create profiles.yml
+        run: |
+          mkdir -p ~/.dbt
+          cat > ~/.dbt/profiles.yml << EOF
+          fintech_saas_ab_analytics:
+            target: ci
+            outputs:
+              ci:
+                type: bigquery
+                method: oauth
+                project: ${{ secrets.GCP_PROJECT_ID }}
+                dataset: fintech_saas_ci
+                threads: 4
+                location: EU
+          EOF
+
+      - name: dbt debug
+        working-directory: fintech_saas_ab_analytics
+        run: dbt debug
+
+      - name: dbt test
+        working-directory: fintech_saas_ab_analytics
+        run: dbt test
