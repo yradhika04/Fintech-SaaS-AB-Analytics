@@ -3,7 +3,7 @@ name: CI - dbt test on PR
 on:
   pull_request:
     paths:
-      - 'fintech_saas_ab_analytics/**'
+      - 'dbt_saas_ab_analytics/**'
 
 jobs:
   dbt-test:
@@ -34,7 +34,7 @@ jobs:
         run: |
           mkdir -p ~/.dbt
           cat > ~/.dbt/profiles.yml << EOF
-          fintech_saas_ab_analytics:
+          dbt_saas_ab_analytics:
             target: ci
             outputs:
               ci:
@@ -47,9 +47,9 @@ jobs:
           EOF
 
       - name: dbt debug
-        working-directory: fintech_saas_ab_analytics
+        working-directory: dbt_saas_ab_analytics
         run: dbt debug
 
       - name: dbt test
-        working-directory: fintech_saas_ab_analytics
+        working-directory: dbt_saas_ab_analytics
         run: dbt test

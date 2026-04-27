@@ -5,7 +5,7 @@ on:
     branches:
       - main
     paths:
-      - 'fintech_saas_ab_analytics/**'
+      - 'dbt_saas_ab_analytics/**'
 
 jobs:
   dbt-deploy:
@@ -36,7 +36,7 @@ jobs:
         run: |
           mkdir -p ~/.dbt
           cat > ~/.dbt/profiles.yml << EOF
-          fintech_saas_ab_analytics:
+          dbt_saas_ab_analytics:
             target: prod
             outputs:
               prod:
@@ -49,9 +49,9 @@ jobs:
           EOF
 
       - name: dbt run
-        working-directory: fintech_saas_ab_analytics
+        working-directory: dbt_saas_ab_analytics
         run: dbt run
 
       - name: dbt test
-        working-directory: fintech_saas_ab_analytics
+        working-directory: dbt_saas_ab_analytics
         run: dbt test
