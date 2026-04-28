@@ -1,0 +1,94 @@
+version: 2
+
+models:
+  - name: stg_fintech_saas__users
+    description: "Users data, one row per user"
+    columns:
+      - name: user_id
+        description: "Primary key to identify each user"
+        data_tests:
+          - unique
+          - not_null
+      - name: signup_date
+        description: "Timestamp of when the user signed up"
+        data_tests:
+          - not_null
+      - name: device
+        description: "The device type used at signup, has around 2% null values"
+      - name: acquisition_channel
+        description: "Channel through which the user was acquired, has around 2% null values"
+
+  - name: stg_fintech_saas__experiment_assignments
+    description: "Information about which experiment a user is assigned to, one row per user"
+    columns:
+      - name: user_id
+        description: "Foreign key to users table"
+        data_tests:
+          - unique
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_fintech_saas__users')
+                field: user_id
+      - name: variant
+        description: "Experiment variant assigned to the user"
+        data_tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: ['control', 'treatment']
+      - name: assigned_at
+        description: "Timestamp when the user was assigned to a variant"
+        data_tests:
+          - not_null
+
+  - name: stg_fintech_saas__events
+    description: "Event stream data with duplicates removed, one row per unique event"
+    columns:
+      - name: event_id
+        description: "Primary key to identify each event"
+        data_tests:
+          - unique
+          - not_null
+      - name: user_id
+        description: "Foreign key to users table"
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_fintech_saas__users')
+                field: user_id
+      - name: event_ts
+        description: "Timestamp of the event"
+        data_tests:
+          - not_null
+
+  - name: stg_fintech_saas__subscriptions
+    description: "Subscriptions data, one row per converted user"
+    columns:
+      - name: user_id
+        description: "Foreign key to users table"
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_fintech_saas__users')
+                field: user_id
+      - name: plan
+        description: "The type of subscription plan"
+        data_tests:
+          - not_null
+          - accepted_values:
+              values: ['free', 'basic', 'premium']
+      - name: mrr
+        description: "The monthly recurring revenue in USD"
+        data_tests:
+          - not_null
+      - name: sub_start_date
+        description: "Date the subscription started"
+        data_tests:
+          - not_null
+      - name: churned
+        description: "Whether or not the user has churned"
+        data_tests:
+          - not_null

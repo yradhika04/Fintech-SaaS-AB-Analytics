@@ -1,0 +1,10 @@
+sources:
+  - name: fintech_saas
+    description: "Fintech SaaS data that contains users, experiment assignments, events, and subscriptions from a 60-day A/B onboarding experiment"
+    database: project-157130f5-0b8a-414d-a34
+    schema: fintech_saas_raw
+    tables:
+      - name: users
+      - name: experiment_assignments
+      - name: events
+      - name: subscriptions
