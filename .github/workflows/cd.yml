@@ -1,4 +1,4 @@
-name: CD - dbt run and test on merge to main
+name: CD - on merge to main
 
 on:
   push:
@@ -48,10 +48,14 @@ jobs:
                 location: EU
           EOF
 
-      - name: dbt run
+      - name: dbt deps
         working-directory: dbt_saas_ab_analytics
-        run: dbt run
+        run: dbt deps
 
-      - name: dbt test
+      - name: dbt debug
         working-directory: dbt_saas_ab_analytics
-        run: dbt test
+        run: dbt debug
+
+      - name: dbt build
+        working-directory: dbt_saas_ab_analytics
+        run: dbt build --target prod

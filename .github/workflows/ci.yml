@@ -1,4 +1,4 @@
-name: CI - dbt test on PR
+name: CI - on PR
 
 on:
   pull_request:
@@ -46,10 +46,14 @@ jobs:
                 location: EU
           EOF
 
+      - name: dbt deps
+        working-directory: dbt_saas_ab_analytics
+        run: dbt deps
+
       - name: dbt debug
         working-directory: dbt_saas_ab_analytics
         run: dbt debug
 
-      - name: dbt test
+      - name: dbt build
         working-directory: dbt_saas_ab_analytics
-        run: dbt test
+        run: dbt build --target ci
