@@ -1,0 +1,63 @@
+version: 2
+
+models:
+  - name: mart_core__user_journey
+    description: "User progression through all funnel steps, one row per user"
+    columns:
+      - name: user_id
+        description: "Primary key to identify each user"
+        data_tests:
+          - unique
+          - not_null
+      - name: variant
+        description: "Experiment variant assigned to the user"
+        data_tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: ['control', 'treatment']
+
+  - name: mart_core__experiment_results
+    description: "User-level experiment metrics for statistical analysis, one row per user"
+    columns:
+      - name: user_id
+        data_tests:
+          - unique
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('mart_core__user_journey')
+                field: user_id
+      - name: variant
+        description: "Experiment variant assigned to the user"
+        data_tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: ['control', 'treatment']
+
+  - name: mart_core__subscriptions
+    description: "Subscription details for each converted user including churn and revenue metrics, 
+    one row per subscriber"
+    columns:
+      - name: user_id
+        data_tests:
+          - unique
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('mart_core__user_journey')
+                field: user_id
+      - name: variant
+        description: "Experiment variant assigned to the user"
+        data_tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: ['control', 'treatment']
+      - name: plan
+        description: "The type of subscription plan"
+        data_tests:
+          - not_null
+          - accepted_values:
+              values: ['free', 'basic', 'premium']
