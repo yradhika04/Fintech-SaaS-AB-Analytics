@@ -7,6 +7,7 @@ select user_id,
        mrr,
        churned,
        churn_date,
+       sub_start_date,
        date_diff(date(churn_date), date(sub_start_date), day) as days_to_churn,
        case
            when churned then mrr * date_diff(date(churn_date), date(sub_start_date), month)
