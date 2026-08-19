@@ -1,4 +1,4 @@
-# Fintech-SaaS-AB-Analytics
+# Fintech SaaS AB Analytics
 
 An **end-to-end analytics project** simulating an **A/B test** on a **fintech** app's new onboarding flow across **10K users**. 
 Although the per-user revenue does not increase significantly, the new flow offers overall **improvements** in 
