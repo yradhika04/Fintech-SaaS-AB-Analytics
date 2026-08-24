@@ -2,7 +2,9 @@
 
 An **end-to-end analytics project** simulating an **A/B test** on a **fintech** app's new onboarding flow across **10K users**. 
 Although the per-user revenue does not increase significantly, the new flow offers overall **improvements** in 
-the **activation, conversion, and retention rates** and should be **shipped**. 
+the **activation, conversion, and retention rates** and should be **shipped**.
+
+The development was structured using GitHub Issues and a Kanban [board](https://github.com/users/yradhika04/projects/3).
 
 ### Tech Stack
 - BigQuery Data Warehouse
